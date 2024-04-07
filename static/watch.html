@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introduction</title>
+    <style>
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: auto;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body class="m-0">
+    <div class="py-4">
+        <div class="container">
+            <h2>Hello, <strong>Welcome to the computing platform.</strong></h2>
+            <p>If you encounter any issues with the platform, please contact us.</p>
+            <p>If you have any features you'd like to add to the platform, please contact us.</p>
+            <p>Jiaqi Su: luskyqi@outlook.com</p>
+            <p>Fu Song: fu.song@outlook.com</p>
+        </div>
+        <div class="container">
+            <p>Take an interactive tour:
+                <a target="_parent" href="../tours/core.galaxy_ui" class="btn btn-secondary btn-sm">Galaxy UI</a>
+                <a target="_parent" href="../tours/core.history" class="btn btn-secondary btn-sm">History</a>
+                <a target="_parent" href="../tours/core.windows" class="btn btn-secondary btn-sm">Window Manager</a>
+                <a target="_parent" href="../tours/core.deferred" class="btn btn-secondary btn-sm">Deferred Datasets</a>
+                <a target="_parent" href="https://docs.galaxyproject.org/en/master/dev/schema.html"
+                    class="btn btn-secondary btn-sm">Tool Script</a>
+            </p>
+        </div>
+    </div>
+
+    <h2>Server Monitoring</h2>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Value</th>
+        </tr>
+        <tr>
+            <td>CPU Cores</td>
+            <td id="cpuCores"></td>
+        </tr>
+        <tr>
+            <td>CPU Usage (%)</td>
+            <td id="cpuUsage"></td>
+        </tr>
+        <tr>
+            <td>GPU Count</td>
+            <td id="gpuCount"></td>
+        </tr>
+        <tr>
+            <td>GPU Usage (%)</td>
+            <td id="gpuUsage"></td>
+        </tr>
+        <tr>
+            <td>Memory Size CPU(GB)</td>
+            <td id="memorySize"></td>
+        </tr>
+        <tr>
+            <td>Memory Usage CPU(%)</td>
+            <td id="memoryUsage"></td>
+        </tr>
+    </table>
+
+    <script>
+        async function updateServerStatus() {
+            try {
+                const response = await fetch('http://0.0.0.0:5010/system-info');
+                const data = await response.json();
+                document.getElementById('cpuCores').innerText = data.cpu_count;
+                // Uncomment below lines to display other server status information
+                document.getElementById('cpuUsage').innerText = data.cpu_usage+ '%';
+                document.getElementById('gpuCount').innerText = data.gpu_count;
+                document.getElementById('gpuUsage').innerText = data.gpu_usage + '%';
+                document.getElementById('memorySize').innerText = data.cpu_memory_total + ' GB';
+                document.getElementById('memoryUsage').innerText = data.cpu_memory_used + ' %';
+            } catch (error) {
+                console.error('Error updating server status:', error);
+            }
+        }
+
+        setInterval(updateServerStatus, 5000); // Update server status every 5 seconds
+        updateServerStatus(); // Update server status immediately after page load
+    </script>
+</body>
+
+</html>
